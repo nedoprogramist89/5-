@@ -1,0 +1,81 @@
+#include <iostream>
+
+class BankAccount {
+private:
+    int accountNumber;
+    double balance;
+    double interestRate;
+
+public:
+    BankAccount(int accNumber, double initialBalance) : accountNumber(accNumber), balance(initialBalance), interestRate(0.0) {}
+
+    void deposit(double amount) {
+        this->balance += amount;
+    }
+
+    bool withdraw(double amount) {
+        if (amount <= this->balance) {
+            this->balance -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    double getBalance() {
+        return this->balance;
+    }
+
+    double getInterest() {
+        return this->balance * this->interestRate * (1.0 / 12);
+    }
+
+    void setInterestRate(double rate) {
+        this->interestRate = rate;
+    }
+
+    int getAccountNumber() {
+        return this->accountNumber;
+    }
+
+    friend bool transfer(BankAccount& from, BankAccount& to, double amount) {
+        if (from.balance >= amount) {
+            from.balance -= amount;
+            to.balance += amount;
+            return true;
+        }
+        return false;
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "");
+    int accNumber1, accNumber2;
+    double initialBalance1, initialBalance2;
+
+    std::cout << "Введите номер для 1 Аккаунта: ";
+    std::cin >> accNumber1;
+    std::cout << "Введите баланс для 1 Аккаунта: ";
+    std::cin >> initialBalance1;
+
+    std::cout << "Введите номер для 2 Аккаунта: ";
+    std::cin >> accNumber2;
+    std::cout << "Введите баланс для 2 Аккаунта: ";
+    std::cin >> initialBalance2;
+
+    BankAccount acc1(accNumber1, initialBalance1);
+    BankAccount acc2(accNumber2, initialBalance2);
+
+    std::cout << "Баланс 1 аккаунта: " << acc1.getBalance() << std::endl;
+    std::cout << "Баланс 1 аккаунта: " << acc2.getBalance() << std::endl;
+
+    double transferAmount;
+    std::cout << "Введите сумму которую надо отправить с 1 на 2 аккаунт: ";
+    std::cin >> transferAmount;
+
+    transfer(acc1, acc2, transferAmount);
+
+    std::cout << "Ьаланс 1 аккаунта: " << acc1.getBalance() << std::endl;
+    std::cout << "Баланс 2 аккаунта: " << acc2.getBalance() << std::endl;
+
+    return 0;
+}
